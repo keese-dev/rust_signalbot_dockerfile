@@ -1,17 +1,17 @@
-FROM rust:1.92-slim-bookworm AS planner
-RUN cargo install cargo-chef
+# FROM rust:1.92-slim-bookworm AS planner
+# RUN cargo install cargo-chef
 
-WORKDIR /app
-# Copy the whole project
-COPY . .
-# Prepare a build plan ("recipe")
-RUN cargo chef prepare --recipe-path recipe.json
+# WORKDIR /app
+# # Copy the whole project
+# COPY . .
+# # Prepare a build plan ("recipe")
+# RUN cargo chef prepare --recipe-path recipe.json
 
 
 
 
 FROM rust:1.92-slim-bookworm AS builder
-RUN cargo install cargo-chef
+# RUN cargo install cargo-chef
 # Install build-time system dependencies.
 # - libssl-dev & pkg-config: for the `openssl-sys` crate, a dependency of `reqwest` and `pq-sys`.
 RUN apt-get update && apt-get install -y libssl-dev pkg-config && rm -rf /var/lib/apt/lists/*
@@ -23,7 +23,7 @@ COPY --from=planner /app/recipe.json recipe.json
 
 # Build dependencies - this layer is cached as long as `recipe.json`
 # doesn't change.
-RUN cargo chef cook --recipe-path recipe.json
+# RUN cargo chef cook --recipe-path recipe.json
 
 
 
